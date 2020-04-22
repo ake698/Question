@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link rel="stylesheet" href="/static/css/style1.css">
+</head>
+<body>
+    
+    <div class="container">
+       <div class="login-box">
+            <div class="apple-btn login-apple">
+                <li class="red-btn"></li>
+                <li class="yellow-btn"></li>
+                <li class="green-btn"></li>
+            </div>
+            <div class="title">LOGIN</div>
+            <div class="input">
+                <input type="text" id="login-user" placeholder="请输入你的账号" maxlength="8">
+            </div>
+            <div class="input">
+                <input type="password" id="login-password" placeholder="请输入你的密码" maxlength="16">
+            </div>
+            <div class="btn login-btn">
+                <span id="btn_login">登录</span>
+            </div>
+            <div class="change-box login-change">
+                <div class="change-btn toSign">
+                    <span>去注册</span>
+                </div>
+            </div>
+       </div>
+
+       <div class="sign-box">
+            <div class="apple-btn sign-apple">
+                <li class="red-btn"></li>
+                <li class="yellow-btn"></li>
+                <li class="green-btn"></li>
+            </div>
+            <div class="title">Sign</div>
+            <div class="input">
+                <input type="text" id="sign-user" placeholder="请创建一个账号" maxlength="8">
+            </div>
+            <div class="input">
+                <input type="password" id="sign-password" placeholder="请创建一个密码" maxlength="16">
+            </div>
+            <div class="btn sign-btn">
+                <span id="btn_register">注册</span>
+            </div>
+            <div class="change-box sign-change">
+                <div class="change-btn toLogin">
+                    <span>去登陆</span>
+                </div>
+            </div>
+       </div>
+    </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/script.js"></script>
+    <script>
+        function verification(way){
+            flag = false;
+            if(way == "login"){
+                username = $("#login-user").val();
+                password = $("#login-password").val();
+            }else{
+                username = $("#sign-user").val();
+                password = $("#sign-user").val();
+            }
+
+            if(username!=null && username!="" &&password!=null & password != ""){
+                return true;
+            }else{
+                alert("请输入完整数据！")
+            }
+            return false;
+        }
+
+        function PostAjax(way){
+            var username = "";
+            var password = "";
+            var url = "";
+            if(way == "login"){
+                username = $("#login-user").val();
+                password = $("#login-password").val();
+                url = "/login/"
+            }else{
+                username = $("#sign-user").val();
+                password = $("#sign-password").val();
+                url = "/register/";
+            }
+            $.ajax({
+                url:url,
+                type:"post",
+                data:{username:username,password:password},
+                success: function (data) {
+                    if(data.code == "200"){
+                        alert("success!");
+                        if (url=="/login/")window.location.href="/index/"
+                    }else{
+                        alert(data.detail)
+                    }
+                }
+            })
+        }
+
+        $("#btn_login").click(function () {
+            if(verification("login")){
+                console.log("login");
+                PostAjax("login")
+            }
+        });
+
+        $("#btn_register").click(function () {
+            if(verification("register")){
+                PostAjax("register")
+            }
+        })
+    </script>
+</body>
+</html>

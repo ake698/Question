@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="/static/res/layui/css/layui.css">
 <link rel="stylesheet" href="/static/res/css/global.css">
 <script src="/static/res/layui/layui.js"></script>
-<script src="js/jquery.js"></script>
 <style type="text/css" rel="stylesheet">
 form {
 	margin: 0;
@@ -30,7 +29,7 @@ form {
 		<div class="wrap">
 			<div class="content detail">
 				<div class="fly-panel detail-box">
-					<h1>问题1</h1>
+					<h1>{{question.title}}</h1>
 					<div class="fly-tip fly-detail-hint" data-id="">
 						<span class="fly-tip-stick">置顶帖</span><span class="jie-admin"> <a
 							href="">点击置顶</a> </span> <span
@@ -44,82 +43,69 @@ form {
 					</div>
 					<div class="detail-about">
 						<a class="jie-user" href=""> <img
-							src="/static/res/images/uer.jpg" alt="头像"> <cite> 纸飞机
+							src="/media/{{question.users.img}}" alt="头像"> <cite> {{question.users.nickname}}
 								<em>2017-05-01发布</em> </cite> </a>
 						<div class="detail-hits" data-id="{{rows.id}}">
 							 <span class="layui-btn layui-btn-mini jie-admin"><a
-								href="#">已完帖，无法编辑</a> </span> <span
+								href="#">已完帖，无法编辑</a> </span>
+                            <span
 								class="layui-btn layui-btn-mini jie-admin" type="collect"
-								data-type="add"> <a id="collectPost">收藏</a> </span> <span
+								data-type="add"> <a id="collectPost">收藏</a> </span>
+                            <span
 								class="layui-btn layui-btn-mini jie-admin  layui-btn-danger"
 								type="collect" data-type="add"> <a>取消收藏</a> </span>
 
 						</div>
 					</div>
 					<div class="detail-body photos" style="margin-bottom: 20px;">
-						<p>帖子内容</p>
+						{{question.content | safe}}
 					</div>
 				</div>
 				<div class="fly-panel detail-box" style="padding-top: 0;">
 					<a name="comment"></a>
 					<ul class="jieda photos" id="jieda">
-						<li data-id="12" class="jieda-daan"><a
-							name="item-121212121212"></a>
+                        {% for i in question.answer_set.all %}
+						<li data-id="12" class="jieda-daan">
 							<div class="detail-about detail-about-reply">
 								<a class="jie-user" href=""> <img
-									src="/static/res/images/uer.jpg" alt=""> <cite> <i>纸飞机</i>
+									src="/media/{{ i.users.img }}" alt=""> <cite> <i>{{i.users.nickname}}</i>
 										 </cite> </a>
 								<div class="detail-hits">
-									<span>3分钟前</span>
+									<span>{{i.createTime}}</span>
 								</div>
-								<i class="iconfont icon-caina" title="最佳答案"></i>
+                                {% if i.status == "T" %}
+								    <i class="iconfont icon-caina" title="最佳答案"></i>
+                                {% endif %}
 							</div>
 							<div class="detail-body jieda-body">
-								<p>么么哒</p>
+								<p>{{i.content}}</p>
 							</div>
 							<div class="jieda-reply">
 								<span class="jieda-zan zanok" type="zan"><i
-									class="iconfont icon-zan"></i><em>12</em>
+									class="iconfont icon-zan"></i><em>{{i.likes}}</em>
 								</span>
-
+                            {% if question.status == "F" %}
+                            <div class="jieda-admin">
+                                <span type="del"><a href="#" class="layui-btn layui-btn-danger layui-btn-small">删除</a></span>
+                                <span class="jieda-accept" type="accept">
+                                <a href="#" class="layui-btn  layui-btn-small">采纳</a></span>
+                            </div>
+                            {% endif %}
 							</div></li>
-						<li data-id="13"><a name="item-121212121212"></a>
-							<div class="detail-about detail-about-reply">
-								<a class="jie-user" href=""> <img
-									src="/static/res/images/uer.jpg" alt=""> <cite> <i>纸飞机</i>
-										<em style="color:#FF9E3F"></em> </cite> </a>
-								<div class="detail-hits">
-									<span>刚刚</span>
-								</div>
-							</div>
-							<div class="detail-body jieda-body">
-								<p>测试回答</p>
-							</div>
-							<div class="jieda-reply">
-								<span class="jieda-zan" type="zan"><i
-									class="iconfont icon-zan"></i><em>0</em>
-								</span>
-								<div class="jieda-admin">
-									<span type="del"><a href="#" class="layui-btn layui-btn-danger layui-btn-small">删除</a></span>
-									<span class="jieda-accept" type="accept">
-									<a href="#" class="layui-btn  layui-btn-small">采纳</a></span>
-								</div>
-							</div></li>
-
+                        {% endfor %}
 					</ul>
 					<span
-										id="toName">@ 纸飞机(楼主)</span>
+										id="toName">@ {{question.users.nickname}}(楼主)</span>
 					<div class="layui-form layui-form-pane">
-						<form action="">
+						<form action="/detail/1/" method="post">
 							<div class="layui-form-item layui-form-text">
 								<div class="layui-input-block">
-										<textarea id="L_content" name="content" required
-										lay-verify="required" placeholder="我要回答"
+										<textarea id="L_content" name="content" placeholder="我要回答"
 										class="layui-textarea fly-editor" style="height: 150px;"></textarea>
 								</div>
 							</div>
 							<div class="layui-form-item">
-								<button class="layui-btn" lay-filter="*" lay-submit>提交回答</button>
+								<button class="layui-btn" lay-filter="*" >提交回答</button>
 							</div>
 						</form>
 					</div>
@@ -129,7 +115,7 @@ form {
 
 		<div class="edge">
 			<dl class="fly-panel fly-list-one">
-				<dt class="fly-panel-title">最近热帖{{ test }}</dt>
+				<dt class="fly-panel-title">最近热帖</dt>
 			</dl>
 
 			<dl class="fly-panel fly-list-one">

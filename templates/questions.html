@@ -17,172 +17,44 @@
             <div class="fly-tab"></div>
 
             <ul class="fly-list">
+                {% for i in q %}
                 <li class="fly-list-li">
-                    <a href="../user/home.html" class="fly-list-avatar">
-                        <img src="/static/res/images/uer.jpg" alt="">
+                    <a href="/detail/{{ i.id }}/" class="fly-list-avatar">
+                        <img src="/media/{{i.users.img}}" alt="头像">
                     </a>
                     <h2 class="fly-tip">
-                        <a href="问题1.html">问题1</a>
+                        <a href="/detail/{{ i.id }}/">{{i.title}}</a>
+                        {% if i.top == "T" %}
                         <span class="fly-tip-stick">置顶</span>
+                        {% endif %}
                     </h2>
                     <p>
-                        <span><a href="">纸飞机</a></span>
-                        <span>刚刚</span>
+                        <span><a href="/detail/1/">{{i.users.nickname}}</a></span>
+                        <span>{{i.createTime}}</span>
 								<span class="fly-list-hint"> 
-              <i class="iconfont" title="回答">&#xe60c;</i> 317
+              <i class="iconfont" title="回答">&#xe60c;</i> {{i.answer_set.count}}
             </span>
                     </p>
                 </li>
-                <li class="fly-list-li">
-                    <a href="" class="fly-list-avatar">
-                        <img src="/static/res/images/uer.jpg" alt="">
-                    </a>
-                    <h2 class="fly-tip">
-                        <a href=""> 问题2 </a>
-                        <span class="fly-tip-stick">置顶</span>
-                    </h2>
-                    <p>
-                        <span><a href="">纸飞机</a></span>
-                        <span>30分钟前</span>
-								<span class="fly-list-hint"> 
-              <i class="iconfont" title="回答">&#xe60c;</i> 502
-            </span>
-                    </p>
-                </li>
-
-                <li class="fly-list-li">
-                    <a href="" class="fly-list-avatar">
-                        <img src="/static/res/images/uer.jpg" alt="">
-                    </a>
-                    <h2 class="fly-tip">
-                        <a href=""> 问题3 </a>
-                        <span class="fly-tip-stick">置顶</span>
-                    </h2>
-                    <p>
-                        <span><a href="">纸飞机</a></span>
-                        <span>30分钟前</span>
-								<span class="fly-list-hint"> 
-              <i class="iconfont" title="回答">&#xe60c;</i> 502
-            </span>
-                    </p>
-                </li>
-                <li class="fly-list-li">
-                    <a href="" class="fly-list-avatar">
-                        <img src="/static/res/images/uer.jpg" alt="">
-                    </a>
-                    <h2 class="fly-tip">
-                        <a href=""> 问题4 </a>
-                        <span class="fly-tip-stick">置顶</span>
-                    </h2>
-                    <p>
-                        <span><a href="">纸飞机</a></span>
-                        <span>30分钟前</span>
-								<span class="fly-list-hint"> 
-              <i class="iconfont" title="回答">&#xe60c;</i> 502
-            </span>
-                    </p>
-                </li>
-                <li class="fly-list-li">
-                    <a href="" class="fly-list-avatar">
-                        <img src="/static/res/images/uer.jpg" alt="">
-                    </a>
-                    <h2 class="fly-tip">
-                        <a href=""> 问题5 </a>
-                    </h2>
-                    <p>
-                        <span><a href="">纸飞机</a></span>
-                        <span>30分钟前</span>
-								<span class="fly-list-hint"> 
-              <i class="iconfont" title="回答">&#xe60c;</i> 502
-            </span>
-                    </p>
-                </li>
-                <li class="fly-list-li">
-                    <a href="" class="fly-list-avatar">
-                        <img src="/static/res/images/uer.jpg" alt="">
-                    </a>
-                    <h2 class="fly-tip">
-                        <a href=""> 问题6 </a>
-                    </h2>
-                    <p>
-                        <span><a href="">纸飞机</a></span>
-                        <span>30分钟前</span>
-								<span class="fly-list-hint"> 
-              <i class="iconfont" title="回答">&#xe60c;</i> 502
-            </span>
-                    </p>
-                </li>
-                <li class="fly-list-li">
-                    <a href="" class="fly-list-avatar">
-                        <img src="/static/res/images/uer.jpg" alt="">
-                    </a>
-                    <h2 class="fly-tip">
-                        <a href=""> 问题7 </a>
-                    </h2>
-                    <p>
-                        <span><a href="">纸飞机</a></span>
-                        <span>30分钟前</span>
-								<span class="fly-list-hint"> 
-              <i class="iconfont" title="回答">&#xe60c;</i> 502
-            </span>
-                    </p>
-                </li>
-                <li class="fly-list-li">
-                    <a href="" class="fly-list-avatar">
-                        <img src="/static/res/images/uer.jpg" alt="">
-                    </a>
-                    <h2 class="fly-tip">
-                        <a href=""> 问题8 </a>
-                    </h2>
-                    <p>
-                        <span><a href="">纸飞机</a></span>
-                        <span>30分钟前</span>
-								<span class="fly-list-hint"> 
-              <i class="iconfont" title="回答">&#xe60c;</i> 502
-            </span>
-                    </p>
-                </li>
-                <li class="fly-list-li">
-                    <a href="" class="fly-list-avatar">
-                        <img src="/static/res/images/uer.jpg" alt="">
-                    </a>
-                    <h2 class="fly-tip">
-                        <a href=""> 问题9 </a>
-                    </h2>
-                    <p>
-                        <span><a href="">纸飞机</a></span>
-                        <span>30分钟前</span>
-								<span class="fly-list-hint"> 
-              <i class="iconfont" title="回答">&#xe60c;</i> 502
-            </span>
-                    </p>
-                </li>
-                <li class="fly-list-li">
-                    <a href="" class="fly-list-avatar">
-                        <img src="/static/res/images/uer.jpg" alt="">
-                    </a>
-                    <h2 class="fly-tip">
-                        <a href=""> 问题10 </a>
-                    </h2>
-                    <p>
-                        <span><a href="">纸飞机</a></span>
-                        <span>30分钟前</span>
-								<span class="fly-list-hint"> 
-              <i class="iconfont" title="回答">&#xe60c;</i> 502
-            </span>
-                    </p>
-                </li>
-
+                {% endfor %}
             </ul>
 
             <div style="text-align: center">
-                <div class="laypage-main"><span class="laypage-curr">1</span>
-                    <a href="">2</a>
-                    <a href="">3</a>
-                    <a href="">4</a>
-                    <a href="">5</a><span>…</span>
-                    <a href="" class="laypage-last" title="尾页">尾页</a>
-                    <a href="" class="laypage-next">下一页</a>
+                <div class="laypage-main">
+                 {% if q.has_previous %}
+                    <a href="/questions/?page={{ q.previous_page_number }}" class="laypage-next">上一页</a>
+                {% endif %}
+                    {% for i in paginator.page_range %}
+                        {% if i == page %}
+                            <span class="laypage-curr">{{ i }}</span>
+                        {% else %}
+                            <a href="/questions/?page={{ i }}" class="laypage" title="{{ i }}">{{ i }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    <a href="/questions/?page={{ paginator.num_pages }}" class="laypage-last" title="尾页">尾页</a>
+                {% if q.has_next %}
+                    <a href="/questions/?page={{ q.next_page_number }}" class="laypage-next">下一页</a>
+                {% endif %}
                 </div>
             </div>
 

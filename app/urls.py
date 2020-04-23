@@ -5,11 +5,11 @@
 # @File    : urls.py
 
 import app.views as v
-from django.urls import path
+from django.urls import path,re_path
 
 urlpatterns = [
     path('index/', v.index),
-    path('detail/', v.detail),
+    re_path(r'^detail/(?P<id>\d+)/$', v.detail),
     path('questions/', v.questions),
     path('add_question/', v.add_question),
 ]

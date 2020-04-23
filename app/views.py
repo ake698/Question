@@ -3,23 +3,20 @@ from django.shortcuts import render,redirect
 from app.libs.identity_check import check
 from app.libs.initJson import initJson
 import json
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
-#拦截器 用于检测用户是否登录
-from app.models import Users
+from app.models import *
 
 
-def login_need(func):
-    def wrapper(req,*arg,**kwargs):
-        if not req.session.get('username'):
-            return redirect("/login_register_page/")
-        return func(req,*arg,**kwargs)
-    return wrapper
+def get_current_user(request):
+    user = Users.objects.get(id=2)
+    return user
+
 
 
 def login_register_page(request):
     return render(request, "login_register.html")
-
 
 #用户登录
 def user_login(request):
@@ -64,13 +61,55 @@ def index(request):
 
 
 def questions(request):
-    return render(request,"questions.html")
+    try:
+        key = request.GET["s"]
+        q = Question.objects.filter(title__contains=key)
+        print(key)
+    except:
+        q = Question.objects.all()
+    q = q.order_by("-top")
+    paginator = Paginator(q,15)
+    page = request.GET.get("page")
+    try:
+        page = int(page)
+        q = paginator.page(page)
+    except:
+        q = paginator.page(1)
+        page = 1
+    question = q
+    print(page)
+    return render(request,"questions.html",{"q":q,"paginator":paginator,"page":page})
 
 
-def detail(request):
-    test=  "df"
-    return render(request, "detail.html", {"test":test})
+def detail(request,id):
+    if request.method == "POST":
+        user = get_current_user(request)
+        content = request.POST.get("content")
+        if content and content != "":
+            Answer.objects.create(users=user,content=content,question_id=int(id))
+    question = Question.objects.get(id=int(id))
+    return render(request, "detail.html", {"question":question})
 
 
 def add_question(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        content = request.POST.get("content")
+        bonus = request.POST.get("bonus")
+        user = get_current_user(request)
+        Question.objects.create(users=user, title=title, content=content, bonus=bonus)
+        for i in range(100):
+            title = "超级问题" + str(i)
+            content = "批量添加得内容"+ str(i)
+            Question.objects.create(users=user, title=title, content=content, bonus=bonus)
+        return redirect("/index/")
     return render(request,"add_question.html")
+
+#
+# def add_answer(request):
+#     if request.method == "POST":
+#         pass
+#     else:
+#         errJson = initJson(success=False)
+#         errJson['detail'] = "该账户已存在"
+#         return HttpResponse(json.dumps(errJson), content_type="application/json")

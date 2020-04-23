@@ -6,14 +6,13 @@
 检查登录状态
 '''
 from django.shortcuts import redirect
-from functools import wraps
 
-def login_need():
-    def decorator(func):
-        def wra(req,*arg,**kwargs):
-            identity = req.session.get('username')
-            if not identity:
-                redirect("/login_register_page/")
+
+def login_need(func):
+    def wra(req,*arg,**kwargs):
+        identity = req.session.get('username')
+        if identity:
             return func(req,*arg,**kwargs)
-        return wra
-    return decorator
+        else:
+            return redirect("/login_register_page/")
+    return wra

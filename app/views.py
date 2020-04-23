@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
-from app.libs.identity_check import check
+from app.libs.identity_check import login_need
 from app.libs.initJson import initJson
 import json
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -54,17 +54,17 @@ def register(request):
     else:
         return redirect("/login_register_page/")
 
-
+@login_need
 #帖子主页
 def index(request):
     return render(request,"index.html")
 
 
+@login_need
 def questions(request):
     try:
         key = request.GET["s"]
         q = Question.objects.filter(title__contains=key)
-        print(key)
     except:
         q = Question.objects.all()
     q = q.order_by("-top")
@@ -76,11 +76,10 @@ def questions(request):
     except:
         q = paginator.page(1)
         page = 1
-    question = q
-    print(page)
     return render(request,"questions.html",{"q":q,"paginator":paginator,"page":page})
 
 
+@login_need
 def detail(request,id):
     if request.method == "POST":
         user = get_current_user(request)
@@ -91,6 +90,7 @@ def detail(request,id):
     return render(request, "detail.html", {"question":question})
 
 
+@login_need
 def add_question(request):
     if request.method == "POST":
         title = request.POST.get("title")
@@ -98,10 +98,6 @@ def add_question(request):
         bonus = request.POST.get("bonus")
         user = get_current_user(request)
         Question.objects.create(users=user, title=title, content=content, bonus=bonus)
-        for i in range(100):
-            title = "超级问题" + str(i)
-            content = "批量添加得内容"+ str(i)
-            Question.objects.create(users=user, title=title, content=content, bonus=bonus)
         return redirect("/index/")
     return render(request,"add_question.html")
 

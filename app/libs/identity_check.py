@@ -8,7 +8,7 @@
 from django.shortcuts import redirect
 from functools import wraps
 
-def check():
+def login_need():
     def decorator(func):
         def wra(req,*arg,**kwargs):
             identity = req.session.get('username')

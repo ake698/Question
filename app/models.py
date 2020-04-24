@@ -40,6 +40,7 @@ class Question(models.Model):
     content = models.TextField(verbose_name="帖子内容")
     bonus = models.IntegerField(verbose_name="悬赏金额")
     likes = models.IntegerField(verbose_name="点赞数", default=0)
+    comments = models.IntegerField(verbose_name="评论数", default=0)
     createTime = models.DateTimeField(auto_now=True, verbose_name="提问时间")
     status = models.CharField(choices=status_choice, max_length=1, default="F", verbose_name="是否解决")
 
@@ -71,12 +72,23 @@ class Answer(models.Model):
         verbose_name = "帖子管理"
         verbose_name_plural = "帖子管理"
 
+    def delete(self, using=None, keep_parents=False):
+        super(Answer,self).delete()
+        self.question.comments = self.question.answer_set.count()
+        self.question.save()
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        super(Answer,self).save()
+        self.question.comments = self.question.answer_set.count()
+        self.question.save()
+
 
 class Collections(models.Model):
     id = models.AutoField(primary_key=True, verbose_name="ID")
     question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name="问题")
     users = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name="回答者")
-    createTime = models.DateTimeField(auto_now=True, verbose_name="收藏时间时间")
+    createTime = models.DateTimeField(auto_now=True, verbose_name="收藏时间")
 
     def __str__(self):
         return str(self.id)
@@ -84,3 +96,17 @@ class Collections(models.Model):
     class Meta:
         verbose_name = "收藏管理"
         verbose_name_plural = "收藏管理"
+
+
+class LikesRecord(models.Model):
+    id = models.AutoField(primary_key=True, verbose_name="ID")
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, verbose_name="问题")
+    users = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name="用户")
+    createTime = models.DateTimeField(auto_now=True, verbose_name="点在时间")
+
+    def __str__(self):
+        return str(self.id)
+
+    class Meta:
+        verbose_name = "点赞管理"
+        verbose_name_plural = "点赞管理"

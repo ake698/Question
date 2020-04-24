@@ -25,5 +25,6 @@ urlpatterns = [
     path("login_register_page/", v.login_register_page),
     path('login/',v.user_login),
     path('register/',v.register),
+    path("logout/",v.logout),
     path('', include('app.urls')),
 ]

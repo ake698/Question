@@ -97,7 +97,8 @@
                 success: function (data) {
                     if(data.code == "200"){
                         alert("success!");
-                        if (url=="/login/")window.location.href="/index/"
+                        if (url=="/login/")window.location.href="/index/";
+                        else $(".toLogin").click();
                     }else{
                         alert(data.detail)
                     }

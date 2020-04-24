@@ -19,17 +19,17 @@
             <ul class="fly-list">
                 {% for i in q %}
                 <li class="fly-list-li">
-                    <a href="/detail/{{ i.id }}/" class="fly-list-avatar">
+                    <a href="/detail/{{ i.id }}/" target="_blank" class="fly-list-avatar">
                         <img src="/media/{{i.users.img}}" alt="头像">
                     </a>
                     <h2 class="fly-tip">
-                        <a href="/detail/{{ i.id }}/">{{i.title}}</a>
+                        <a href="/detail/{{ i.id }}/" target="_blank">{{i.title}}</a>
                         {% if i.top == "T" %}
                         <span class="fly-tip-stick">置顶</span>
                         {% endif %}
                     </h2>
                     <p>
-                        <span><a href="/detail/1/">{{i.users.nickname}}</a></span>
+                        <span><a href="/detail/1/" target="_blank">{{i.users.nickname}}</a></span>
                         <span>{{i.createTime}}</span>
 								<span class="fly-list-hint"> 
               <i class="iconfont" title="回答">&#xe60c;</i> {{i.answer_set.count}}

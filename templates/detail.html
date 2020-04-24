@@ -10,6 +10,7 @@
 <meta name="description"
 	content="">
 <link rel="stylesheet" href="/static/res/layui/css/layui.css">
+<link rel="shortcut icon" href="/static/images/favicon.png"/>
 <link rel="stylesheet" href="/static/res/css/global.css">
 <script src="/static/res/layui/layui.js"></script>
 <style type="text/css" rel="stylesheet">
@@ -31,30 +32,42 @@ form {
 				<div class="fly-panel detail-box">
 					<h1>{{question.title}}</h1>
 					<div class="fly-tip fly-detail-hint" data-id="">
-						<span class="fly-tip-stick">置顶帖</span><span class="jie-admin"> <a
-							href="">点击置顶</a> </span> <span
-							class="layui-btn layui-btn-mini jie-admin"> <a href="">取消置顶</a>
-						</span> <span class="jie-admin" type="del" style="margin-left: 20px;">
-							<a>删除该帖</a> </span>
+
+                        {% if question.top == "T" %}
+						    <span class="fly-tip-stick">置顶帖</span>
+                            {% if question.users.username == request.session.username %}
+                            <span class="layui-btn layui-btn-mini jie-admin"> <a href="#" onclick="set_top('F')">取消置顶</a>
+                            {% endif %}
+                        {% else %}
+                            {% if question.users.username == request.session.username %}
+                            <span class="jie-admin"><a href="#" onclick="set_top('T')">点击置顶</a> </span>
+                            {% endif %}
+                        {% endif %}
 						</span>
+                    {% if question.users.username == request.session.username %}
+                        <span class="jie-admin" type="del" style="margin-left: 20px;">
+							<a onclick="delete_question({{ question.id }})">删除该帖</a> </span>
+						</span>
+                    {% endif %}
+                    <span><a href="/index/">返回主页</a></span>
 						<div class="fly-list-hint">
-							<i class="iconfont" title="回答">&#xe60c;</i> 1
+							<i class="iconfont" title="回答">&#xe60c;</i> {{ question.answer_set.count }}
 						</div>
 					</div>
 					<div class="detail-about">
 						<a class="jie-user" href=""> <img
 							src="/media/{{question.users.img}}" alt="头像"> <cite> {{question.users.nickname}}
 								<em>2017-05-01发布</em> </cite> </a>
-						<div class="detail-hits" data-id="{{rows.id}}">
-							 <span class="layui-btn layui-btn-mini jie-admin"><a
-								href="#">已完帖，无法编辑</a> </span>
-                            <span
-								class="layui-btn layui-btn-mini jie-admin" type="collect"
-								data-type="add"> <a id="collectPost">收藏</a> </span>
-                            <span
-								class="layui-btn layui-btn-mini jie-admin  layui-btn-danger"
-								type="collect" data-type="add"> <a>取消收藏</a> </span>
-
+						<div class="detail-hits">
+{#							 <span class="layui-btn layui-btn-mini jie-admin"><a#}
+{#								href="#">已完帖，无法编辑</a> </span>#}
+                            {% if not flag %}
+                            <span class="layui-btn layui-btn-mini jie-admin" type="collect"
+								data-type="add"> <a onclick="collection('T')">收藏</a> </span>
+                            {% else %}
+                            <span class="layui-btn layui-btn-mini jie-admin  layui-btn-danger"
+								type="collect" data-type="add"> <a onclick="collection('F')">取消收藏</a> </span>
+                            {% endif %}
 						</div>
 					</div>
 					<div class="detail-body photos" style="margin-bottom: 20px;">
@@ -62,7 +75,7 @@ form {
 					</div>
 				</div>
 				<div class="fly-panel detail-box" style="padding-top: 0;">
-					<a name="comment"></a>
+{#					<p name="comment">回答列表</p>#}
 					<ul class="jieda photos" id="jieda">
                         {% for i in question.answer_set.all %}
 						<li data-id="12" class="jieda-daan">
@@ -78,26 +91,38 @@ form {
                                 {% endif %}
 							</div>
 							<div class="detail-body jieda-body">
-								<p>{{i.content}}</p>
+								<p>{{i.content | safe}}</p>
 							</div>
 							<div class="jieda-reply">
-								<span class="jieda-zan zanok" type="zan"><i
+								<span class="jieda-zan likeit
+								{% for p in LR %}
+								{% if p.users.username == request.session.username and p.answer_id == i.id %}
+								 zanok
+								 {% endif %}
+								 {% endfor %}
+                                   " data-id="{{ i.id }}"><i
 									class="iconfont icon-zan"></i><em>{{i.likes}}</em>
 								</span>
                             {% if question.status == "F" %}
                             <div class="jieda-admin">
-                                <span type="del"><a href="#" class="layui-btn layui-btn-danger layui-btn-small">删除</a></span>
+                            {% if question.users.username == request.session.username or i.users.username == request.session.username %}
+                                <span type="del"><a href="#" onclick="delete_answer('{{ i.id }}')" class="layui-btn layui-btn-danger layui-btn-small">删除</a></span>
+                            {% endif %}
                                 <span class="jieda-accept" type="accept">
-                                <a href="#" class="layui-btn  layui-btn-small">采纳</a></span>
+                            {% if question.users.username == request.session.username %}
+                                <a class="layui-btn  layui-btn-small justit" data-id="{{ i.id }}">采纳</a></span>
+                            {% endif %}
                             </div>
                             {% endif %}
+
 							</div></li>
                         {% endfor %}
 					</ul>
-					<span
-										id="toName">@ {{question.users.nickname}}(楼主)</span>
+
+                    {% if request.session.username != question.users.username %}
+					<span id="toName">@ {{question.users.nickname}}(楼主)</span>
 					<div class="layui-form layui-form-pane">
-						<form action="/detail/1/" method="post">
+						<form action="/detail/{{ id }}/" method="post">
 							<div class="layui-form-item layui-form-text">
 								<div class="layui-input-block">
 										<textarea id="L_content" name="content" placeholder="我要回答"
@@ -109,6 +134,7 @@ form {
 							</div>
 						</form>
 					</div>
+                    {% endif %}
 				</div>
 			</div>
 		</div>
@@ -116,16 +142,121 @@ form {
 		<div class="edge">
 			<dl class="fly-panel fly-list-one">
 				<dt class="fly-panel-title">最近热帖</dt>
+                {% for i in hot_question1 %}
+				<dt style="margin-left: 2%"><a href="/detail/{{ i.id }}/">{{i.title | slice:10}}</a><span style="float: right;margin-right: 3%;color: firebrick">{{ i.users.nickname }}</span></dt>
+                {% endfor %}
 			</dl>
 
 			<dl class="fly-panel fly-list-one">
 				<dt class="fly-panel-title">近期热议</dt>
+                {% for i in hot_question2 %}
+				<dt style="margin-left: 2%"><a href="/detail/{{ i.id }}/">{{i.title | slice:10}}</a><span style="float: right;margin-right: 3%;color: firebrick">{{ i.users.nickname }}</span></dt>
+                {% endfor %}
 				</dd>
 			</dl>
 		</div>
 	</div>
+    <script src="/static/js/jquery.min.js"></script>
  <script type="text/javascript" charset="utf-8" src="/static/res/js/kindeditor.js"></script>
+
   <script type="text/javascript">
+
+  function set_top(flag){
+      console.log(flag);
+      $.ajax({
+          url:"/set_top/",
+          type:"post",
+          data:{flag:flag,id:{{ question.id }} },
+          success:function (data) {
+              alert("success!");
+              window.location.reload()
+          }
+      })
+  }
+  function collection(flag){
+      console.log(flag);
+      $.ajax({
+          url:"/collection_question/",
+          type:"post",
+          data:{flag:flag,id:{{ question.id }} },
+          success:function (data) {
+              alert("success!");
+              window.location.reload()
+          }
+      })
+  }
+
+  $(".likeit").click(function () {
+    id = $(this).attr("data-id");
+    that = $(this);
+    console.log(id);
+    $.ajax({
+        url:"/like_answer/",
+        type:"post",
+        data:{id:id},
+        success:function (data) {
+            alert("success");
+            /**
+            if(that.hasClass("zanok")){
+                that.removeClass("zanok")
+                window.location.reload();
+            }else{
+                that.addClass("zanok")
+            }
+             **/
+            window.location.reload();
+        }
+    })
+  });
+  function delete_question(id){
+      console.log(id);
+      $.ajax({
+          url:"/delete_question/",
+          type:"post",
+          data:{id:id},
+          success:function (data) {
+              if(data.code == "200"){
+                  alert("success");
+                  window.location.href="/index/"
+              }else{
+                  alert(data.detail)
+              }
+          }
+      })
+  }
+  $(".justit").click(function () {
+    id = $(this).attr("data-id");
+    console.log(id);
+    $.ajax({
+          url:"/select_answer/",
+          type:"post",
+          data:{id:id},
+          success:function (data) {
+              if(data.code == "200"){
+                  alert("success");
+                  window.location.reload()
+              }else{
+                  alert(data.detail)
+              }
+          }
+      })
+  });
+  function delete_answer(id){
+      $.ajax({
+          url:"/delete_answer/",
+          type:"post",
+          data:{id:id},
+          success:function (data) {
+              if(data.code == "200"){
+                  alert("success");
+                  window.location.reload()
+              }else{
+                  alert(data.detail)
+              }
+          }
+      })
+  }
+
     KE.show({
         id : 'L_content',
 		resizeMode : 1,

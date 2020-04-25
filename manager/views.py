@@ -2,18 +2,20 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect
 
 from app.libs.initJson import initJson
+from app.libs.identity_check import login_need
 from app.views import get_current_user
 from app.models import Question,Collections
 import json
 # Create your views here.
 
 
-
+@login_need
 def index(request):
     user = get_current_user(request)
     return render(request,"manager/user.html",{"user":user})
 
 
+@login_need
 #修改个人信息
 def modify(request):
     user = get_current_user(request)
@@ -48,6 +50,7 @@ def modify(request):
     return render(request,"manager/modiry.html",{"user":user})
 
 
+@login_need
 #展示帖子
 def question(request):
     user = get_current_user(request)
@@ -57,6 +60,8 @@ def question(request):
         q = q.filter(title__contains=key)
     return render(request,"manager/question.html",{"q":q})
 
+
+@login_need
 #展示收藏的帖子
 def likes(request):
     user = get_current_user(request)

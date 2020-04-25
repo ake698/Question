@@ -57,7 +57,7 @@ form {
 					<div class="detail-about">
 						<a class="jie-user" href=""> <img
 							src="/media/{{question.users.img}}" alt="头像"> <cite> {{question.users.nickname}}
-								<em>2017-05-01发布</em> </cite> </a>
+								<em>{{ question.createTime }}发布</em> </cite> </a>
 						<div class="detail-hits">
 {#							 <span class="layui-btn layui-btn-mini jie-admin"><a#}
 {#								href="#">已完帖，无法编辑</a> </span>#}
@@ -68,6 +68,7 @@ form {
                             <span class="layui-btn layui-btn-mini jie-admin  layui-btn-danger"
 								type="collect" data-type="add"> <a onclick="collection('F')">取消收藏</a> </span>
                             {% endif %}
+                        <span class="layui-btn layui-btn-mini jie-admin  layui-btn-danger">赏金：{{ question.bonus }}</span>
 						</div>
 					</div>
 					<div class="detail-body photos" style="margin-bottom: 20px;">
@@ -141,16 +142,16 @@ form {
 
 		<div class="edge">
 			<dl class="fly-panel fly-list-one">
-				<dt class="fly-panel-title">最近热帖</dt>
+				<dt class="fly-panel-title" style="font-size: 22px">最近热帖</dt>
                 {% for i in hot_question1 %}
-				<dt style="margin-left: 2%"><a href="/detail/{{ i.id }}/">{{i.title | slice:10}}</a><span style="float: right;margin-right: 3%;color: firebrick">{{ i.users.nickname }}</span></dt>
+				<dt style="margin-left: 2%"><a href="/detail/{{ i.id }}/">{{i.title | slice:":10"}}</a><span style="float: right;margin-right: 3%;color: firebrick">{{ i.users.nickname }}</span></dt>
                 {% endfor %}
 			</dl>
 
 			<dl class="fly-panel fly-list-one">
-				<dt class="fly-panel-title">近期热议</dt>
+				<dt class="fly-panel-title" style="font-size: 22px">近期热议</dt>
                 {% for i in hot_question2 %}
-				<dt style="margin-left: 2%"><a href="/detail/{{ i.id }}/">{{i.title | slice:10}}</a><span style="float: right;margin-right: 3%;color: firebrick">{{ i.users.nickname }}</span></dt>
+				<dt style="margin-left: 2%"><a href="/detail/{{ i.id }}/">{{i.title | slice:":10"}}</a><span style="float: right;margin-right: 3%;color: firebrick">{{ i.users.nickname }}</span></dt>
                 {% endfor %}
 				</dd>
 			</dl>
@@ -195,7 +196,7 @@ form {
         type:"post",
         data:{id:id},
         success:function (data) {
-            alert("success");
+{#            alert("success");#}
             /**
             if(that.hasClass("zanok")){
                 that.removeClass("zanok")

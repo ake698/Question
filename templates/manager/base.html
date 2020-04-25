@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}在线问答系统后台{% endblock %}</title>
+    {% load staticfiles %}
+    <link rel="shortcut icon" href="/static/images/favicon.png"/>
+    <link rel='stylesheet' href='/static/css/simple-line-icons.css'>
+    <link rel='stylesheet' href='/static/css/fontawesome-all.min.css'>
+    <link rel='stylesheet' href='/static/css/styles.css'>
+    {% block css %}
+        <link rel='stylesheet' href='/static/css/styles2.css'>
+    {% endblock %}
+</head>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+        <nav class="navbar page-header">
+        <a href="#" class="btn btn-link sidebar-mobile-toggle d-md-none mr-auto">
+            <i class="fa fa-bars"></i>
+        </a>
+
+        <a class="navbar-brand" href="#">
+            <span class="navbar-brand b_span">
+                在线问答系统后台
+            </span>
+        </a>
+
+        <a href="#" class="btn btn-link sidebar-toggle d-md-down-none">
+            <i class="fa fa-bars"></i>
+        </a>
+{#            <a href="" class="btn btn-link sidebar-toggle d-md-down-none" id="sidebar_toggle">#}
+{#                <i class="fa fa-bars"></i>#}
+{#            </a>#}
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item d-md-down-none">
+                    <span class="time" style="font-size: .900rem; color: #fff; margin-right: 20px"></span>
+                </li>
+
+
+
+                    <a class="nav-link" href="#">
+                        <span class="small ml-1 d-md-down-none" style="color: #fff">{{ request.session.nickname }}</span>
+                    </a>
+
+                </li>
+            </ul>
+        </nav>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <nav class="sidebar-nav">
+                <ul class="nav">
+                    <span class="nav-title">问答系统</span>
+                    <li class="nav-item nav-dropdown">
+                        <a href="#" class="nav-link nav-dropdown-toggle">
+                            <i class="icon icon-pencil"></i> 个人信息 <i class="fa fa-caret-left"></i>
+                        </a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a href="/user/index/" class="nav-link">
+                                    查看个人信息
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/user/modify/" class="nav-link">
+                                    修改个人信息
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a href="/user/question/" class="nav-link">
+                            <i class="icon icon-user"></i> 我的问题
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a href="/user/likes/" class="nav-link">
+                            <i class="icon icon-clock"></i> 收藏列表
+                        </a>
+
+                    </li>
+                    <span class="nav-title">系统</span>
+
+                    <li class="nav-item">
+                        <a href="/index/" class="nav-link">
+                            <i class="icon icon-home"></i>  返回主页
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="window.location.href='/logout/'">
+                            <i class="icon icon-power"></i> 退出登录
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            {% block content %}
+                base.html
+            {% endblock %}
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="/static/js/jquery-3.1.1.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/chart.min.js"></script>
+<script src="/static/js/carbon.js"></script>
+<script src="/static/js/demo.js"></script>
+<script src="/static/js/b_demo.js"></script>
+<script src="/static/js/time.js"></script>
+    {% block js %}
+    {% endblock %}
+</body>
+</html>

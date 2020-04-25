@@ -14,6 +14,7 @@ class Users(models.Model):
     img = models.ImageField(upload_to="img", verbose_name="用户头像", null=True, blank=True, default="default.jpg")
     password = models.CharField(max_length=10, verbose_name="密码")
     status = models.CharField(verbose_name="是否允许登陆", choices=status_choice, max_length=1, default="T")
+    bonus = models.IntegerField(verbose_name="赏金",default=0)
     createTime = models.DateTimeField(auto_now=True, verbose_name="创建时间")
 
     def __str__(self):
@@ -38,7 +39,7 @@ class Question(models.Model):
     top = models.CharField(choices=top_choice, max_length=1, default="F", verbose_name="是否置顶")
     title = models.CharField(max_length=100, verbose_name="帖子标题")
     content = models.TextField(verbose_name="帖子内容")
-    bonus = models.IntegerField(verbose_name="悬赏金额")
+    bonus = models.IntegerField(verbose_name="悬赏金额",default=10)
     likes = models.IntegerField(verbose_name="点赞数", default=0)
     comments = models.IntegerField(verbose_name="评论数", default=0)
     createTime = models.DateTimeField(auto_now=True, verbose_name="提问时间")

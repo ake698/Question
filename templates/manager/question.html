@@ -1,0 +1,86 @@
+{% extends 'manager/base.html' %}
+
+{% block content %}
+    <div class="row mt-4">
+        <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                                问题列表
+         <div class="w3l_search float-right">
+    			<form action="/user/question/" method="get">
+    				<input type="search" name="Search" style="Float:left;height:35px;font-size: 16px" placeholder="搜索" required="">
+    				<button type="submit" class="btn btn-primary" style="Float:left;height:35px" aria-label="Left Align">
+    					<i class="fa fa-search" aria-hidden="true"> </i>
+    				</button>
+    				<div class="clearfix"></div>
+    			</form>
+                
+		      </div>
+
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>标题</th>
+                                        <th>赏金</th>
+                                        <th>点赞数</th>
+                                        <th>评论数</th>
+                                        <th>是否解决</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody style="height: 300px;overflow-y: auto">
+                                    {% for g in q %}
+                                    <tr>
+                                        <td>
+                                            <span>{{ g.id }}</span>
+                                        </td>
+                                        <td>{{ g.title }}</td>
+                                        <td>{{ g.bonus }}</td>
+                                        <td>{{ g.likes }}</td>
+                                        <td class="text-nowrap">{{ g.comments }}</td>
+                                    {% if g.status == "T" %}
+                                        <td>已解决</td>
+                                    {% else %}
+                                        <td>未解决</td>
+                                    {% endif %}
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-sm" onclick="window.location.href='/detail/{{ g.id }}'">查看</button>
+                                            <button type="button" class="btn btn-warning btn-sm" onclick="delete_question({{ g.id }})">删除</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+
+            <!-- //页码选择菜单 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>
+
+{% endblock %}
+{% block js %}
+    <script>
+
+    function delete_question(id){
+        $.ajax({
+            url:"/delete_question/",
+            data:{id:id},
+            type:"post",
+            success: function (data) {
+                if(data.code == 200){
+                    alert("操作成功！");
+                    window.location.reload()
+                }
+            }
+        })
+    }
+    </script>
+{% endblock %}

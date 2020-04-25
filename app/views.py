@@ -117,17 +117,26 @@ def detail(request, id):
 
 
 @login_need
+#发布帖子
 def add_question(request):
     if request.method == "POST":
         title = request.POST.get("title")
         content = request.POST.get("content")
         bonus = request.POST.get("bonus")
         user = get_current_user(request)
+        #当用户赏金不够的时候扣除其最所有赏金
+        if user.bonus < int(bonus):
+            bonus = user.bonus
+            user.bonus = 0
+        else:
+            user.bonus -= int(bonus)
+        user.save()
         question = Question.objects.create(users=user, title=title, content=content, bonus=bonus)
         return redirect("/detail/%s/" % question.id)
     return render(request, "add_question.html")
 
 
+@login_need
 # 置顶功能
 def set_top(request):
     if request.method == "POST":
@@ -140,7 +149,7 @@ def set_top(request):
     errJson = initJson(success=False)
     return HttpResponse(json.dumps(errJson), content_type="application/json")
 
-
+@login_need
 # 删除帖子功能
 def delete_question(request):
     if request.method == "POST":
@@ -157,6 +166,7 @@ def delete_question(request):
     return HttpResponse(json.dumps(errJson), content_type="application/json")
 
 
+@login_need
 # 收藏功能
 def collection_question(request):
     if request.method == "POST":
@@ -171,7 +181,7 @@ def collection_question(request):
     errJson = initJson(success=False)
     return HttpResponse(json.dumps(errJson), content_type="application/json")
 
-
+@login_need
 # 点赞功能
 def like_answer(request):
     if request.method == "POST":
@@ -190,7 +200,7 @@ def like_answer(request):
     errJson = initJson(success=False)
     return HttpResponse(json.dumps(errJson), content_type="application/json")
 
-
+@login_need
 # 删除回答
 def delete_answer(request):
     if request.method == "POST":
@@ -202,6 +212,7 @@ def delete_answer(request):
     return HttpResponse(json.dumps(errJson), content_type="application/json")
 
 
+@login_need
 # 采纳回答
 def select_answer(request):
     if request.method == "POST":
@@ -215,6 +226,11 @@ def select_answer(request):
         answer.question.status = "T"
         answer.question.save()
         answer.save()
+        #赏金转移
+        bonus = answer.question.bonus
+        user = answer.users
+        user.bonus += bonus
+        user.save()
         return HttpResponse(json.dumps(initJson()), content_type="application/json")
     errJson = initJson(success=False)
     return HttpResponse(json.dumps(errJson), content_type="application/json")

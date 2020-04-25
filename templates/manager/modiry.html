@@ -1,0 +1,179 @@
+{% extends 'manager/base.html' %}
+{% block content %}
+
+    <div class="container-fluid" style="font-size: 18px">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="list-group">
+                            <a  class="list-group-item" style="text-align: center">个人信息修改</a>
+                            <a class="list-group-item active" id="new_in" style="cursor: pointer;">修改信息</a>
+                            <a class="list-group-item" id="new_in" style="cursor: pointer;">修改密码</a>
+                        </div>
+                    </div>
+                    <!-- new_in -->
+                    <div class="col-md-10" id="new_in_card">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                <span>修改信息</span>
+                            </div>
+                <!-- form with image -->
+                <form id="user_form" action="/user/modify/" method="post" enctype="multipart/form-data">
+                            <div class="card-body">
+                                <div class="row mb-5">
+                                    <div class="col-md-4 mb-4">
+                                        <div>个人信息</div>
+                                        <div class="text-muted small">修改个人信息</div>
+                                        <div class="col-md-6" style="text-align: center; margin: 0 auto">
+                                            <div class="form-group" style="width: 150px">
+                                                <label class="form-control-label">&nbsp;</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-label">昵称</label>
+                                                    <input class="form-control input_check" name="nick_name" placeholder="输入昵称" value="{{ user.nickname }}">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-label">密码</label>
+                                                    <input type="password" class="form-control input_check"  name="password" placeholder="输入密码">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <div class="row mt-5">
+                                    <div class="col-md-4 mb-4">
+                                        <div>头像信息</div>
+                                        <div class="text-muted small">填写相关信息</div>
+                                    </div>
+
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-label">头像</label>
+                                                    <input type="file" class="form-control" name="vatar">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                </form>
+
+                            <div class="card-footer bg-light text-right">
+                                    <button type="submit" class="btn btn-primary" onclick="save_purchase()">保存</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //new_in -->
+                    <!-- supplement -->
+                    <!-- //supplement -->
+                </div>
+            </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/jquery.form.js"></script>
+    <script>
+        $('#new_in').on('click', function () {
+            $(this).attr('class', 'list-group-item active');
+            $('#supplement').attr('class', 'list-group-item');
+            $('#withdraw').attr('class', 'list-group-item');
+            {#$('#withdraw_card').css('display', 'none');#}
+            $('#new_in_card').css('display', '');
+            $('#supplement_card').css('display', 'none');
+            history.pushState(null, null, '/purchase')
+        });
+
+        $('#supplement').on('click', function () {
+            $(this).attr('class', 'list-group-item active');
+            $('#new_in').attr('class', 'list-group-item');
+            $('#withdraw').attr('class', 'list-group-item');
+            $('#new_in_card').css('display', 'none');
+            $('#supplement_card').css('display', '');
+
+            $('#withdraw_save').hide();
+            $('#supplement_save').show();
+            $('.provider_info').show();
+            {#history.pushState(null, null, '/purchase?id=')#}
+        });
+        $('#withdraw').on('click', function () {
+            $(this).attr('class', 'list-group-item active');
+            $('#supplement').attr('class', 'list-group-item');
+            $('#new_in').attr('class', 'list-group-item');
+            $('#new_in_card').css('display', 'none');
+            {#$('#withdraw_card').css('display', '');#}
+            $('#supplement_card').css('display', '');
+
+            $('#withdraw_save').show();
+            $('#supplement_save').hide();
+            $('.provider_info').hide();
+            {#history.pushState(null, null, '/purchase?id=')#}
+        });
+
+        function jduge(){
+            flag = true;
+            for(var i=0; i<=1; i++){
+                temp = $("#user_form")[0][i].value;
+                if(temp == ""){
+                    flag = false;
+                }
+                if(i==1){
+                    if(temp.length < 6){
+                        flag = false;
+                        alert("密码长度必须设置为6位数!")
+                    }
+                }
+                if(i==0){
+                    if(temp.length < 2 || temp.length > 10){
+                        flag = false;
+                        alert("昵称长度在3-10之间！")
+                    }
+                }
+            }
+            return flag;
+        }
+
+        function save_purchase() {
+            if(jduge()){
+                $('#user_form').ajaxSubmit({
+                        success: function (data) {
+{#                            console.log(data);#}
+{#                            if(data.code == "200"){#}
+{#                                alert("成功！");#}
+                                window.location.href="/user/index/";
+{#                            }else{#}
+{#                                alert(data.detail)#}
+{#                            }#}
+                        },
+                        error: function (data) {
+                            {#console.log("inside else");#}
+                            alert('数据异常，请检查输入的内容');
+                        }
+                    });
+            }
+
+        }
+
+
+    </script>
+{% endblock %}

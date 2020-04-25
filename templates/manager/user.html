@@ -1,0 +1,90 @@
+{% extends 'manager/base.html' %}
+
+{% block content %}
+    <div class="row mt-4">
+        <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                                个人信息
+         <div class="w3l_search float-right">
+
+                
+		      </div>
+
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive" style="width: 100%;height: 80%">
+                                <div class="avatar" style="float: left;width: 30%;height: 30%;">
+                                    <img src="/media/{{ user.img }}" style="height: 100%;width: 100%">
+                                </div>
+
+                                <div class="information" style="float: right;margin-right: 30%">
+                                    <p>账户：{{ user.username }}</p>
+                                    <p>昵称：{{ user.nickname }}</p>
+                                    <p>赏金：{{ user.bonus }}</p>
+                                    <p>创建时间：{{ user.createTime }}</p>
+                                    <hr>
+                                    <button type="button" class="btn btn-outline-primary" onclick="window.location.href='/user/modify/'" style="margin-top: 50%">修改个人信息</button>
+                                </div>
+
+
+            <!-- //页码选择菜单 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>
+
+{% endblock %}
+{% block js %}
+    <script>
+    // 控制输入框只能输入整数或者浮点数
+    function CheckInputIntFloat(oInput) {
+        if('' != oInput.value.replace(/\d{1,}\.{0,1}\d{0,}/,'')) {
+            oInput.value = oInput.value.match(/\d{1,}\.{0,1}\d{0,}/) == null ? '' :oInput.value.match(/\d{1,}\.{0,1}\d{0,}/);
+            }
+    }
+    // 输入框回车事件
+    $('.lower_input').keydown(function(e) {
+            {#$(this).siblings().css('display', '');#}
+           if (e.keyCode == 13) {
+                {#console.log($(this).siblings());#}
+                console.log($(this).find('.lower_check'));
+                $(this).find('.lower_check').click();
+           }
+           if (e.keyCode == 27) {
+                {#console.log($(this).siblings());#}
+                console.log($(this).find('.lower_check'));
+                $(this).find('.lower_cancel').click();
+           }
+      });
+    // 回车ajax
+    $('.lower_check').click(function () {
+        var data = {
+            id: $(this).siblings('input').attr('id'),
+            lower: $(this).siblings('input').val(),
+        };
+        console.log(data);
+        $.post('/good_lower/', data, function (text, status) {
+            alert(text);
+            if(text==="ok"){
+                console.log("okok");
+                $('.lower_cancel').click();
+                window.location.reload();
+                {#$(".card-body").load(location.href + " .card-body");#}
+                {#$(".hover_span").load(location.href + " .hover_span");#}
+            }
+            else{
+                console.log("nono");
+            }
+        });
+    });
+    {% if flag %}
+        alert("{{ msg }}");
+    {% endif %}
+
+
+
+    </script>
+{% endblock %}

@@ -32,7 +32,7 @@ class Question(models.Model):
     )
     status_choice = (
         ("T", "已解决"),
-        ("F", "为解决"),
+        ("F", "未解决"),
     )
     id = models.AutoField(primary_key=True, verbose_name="ID")
     users = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name="提问者")
@@ -70,8 +70,8 @@ class Answer(models.Model):
         return self.content
 
     class Meta:
-        verbose_name = "帖子管理"
-        verbose_name_plural = "帖子管理"
+        verbose_name = "回复管理"
+        verbose_name_plural = "回复管理"
 
     def delete(self, using=None, keep_parents=False):
         super(Answer,self).delete()

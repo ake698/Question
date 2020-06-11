@@ -234,3 +234,21 @@ def select_answer(request):
         return HttpResponse(json.dumps(initJson()), content_type="application/json")
     errJson = initJson(success=False)
     return HttpResponse(json.dumps(errJson), content_type="application/json")
+
+@login_need
+# 获取个人信息
+def person_info(request):
+    if request.method == "POST":
+        id = request.POST["id"]
+        user = Users.objects.get(id=int(id))
+        result = initJson()
+        person = {
+            "nickname":user.nickname,
+            "bonus":user.bonus,
+            "college":user.college,
+            "major":user.major,
+            "gender":user.get_gender(),
+        }
+        result["detail"] = person
+        return HttpResponse(json.dumps(result), content_type="application/json")
+    return HttpResponse("error!")

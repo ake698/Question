@@ -37,9 +37,7 @@
                                                     <input class="form-control input_check" name="nick_name" placeholder="输入昵称" value="{{ user.nickname }}">
                                                 </div>
                                             </div>
-
                                         </div>
-
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
@@ -48,6 +46,35 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-label">性别</label>
+                                                    <select class="form-control input_check" name="gender">
+                                                        <option value="T">男</option>
+                                                        <option value="F">女</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-label">院系</label>
+                                                    <input class="form-control input_check" name="college" placeholder="输入院系" value="{{ user.college }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-label">专业</label>
+                                                    <input class="form-control input_check" name="major" placeholder="输入专业" value="{{ user.major }}">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div>
 
@@ -100,7 +127,6 @@
             {#$('#withdraw_card').css('display', 'none');#}
             $('#new_in_card').css('display', '');
             $('#supplement_card').css('display', 'none');
-            history.pushState(null, null, '/purchase')
         });
 
         $('#supplement').on('click', function () {
@@ -113,7 +139,6 @@
             $('#withdraw_save').hide();
             $('#supplement_save').show();
             $('.provider_info').show();
-            {#history.pushState(null, null, '/purchase?id=')#}
         });
         $('#withdraw').on('click', function () {
             $(this).attr('class', 'list-group-item active');
@@ -126,18 +151,17 @@
             $('#withdraw_save').show();
             $('#supplement_save').hide();
             $('.provider_info').hide();
-            {#history.pushState(null, null, '/purchase?id=')#}
         });
 
         function jduge(){
             flag = true;
             for(var i=0; i<=1; i++){
                 temp = $("#user_form")[0][i].value;
-                if(temp == ""){
-                    flag = false;
-                }
+{#                if(temp == ""){#}
+{#                    flag = false;#}
+{#                }#}
                 if(i==1){
-                    if(temp.length < 6){
+                    if(temp.length < 6 && temp.length != 0){
                         flag = false;
                         alert("密码长度必须设置为6位数!")
                     }
@@ -156,13 +180,7 @@
             if(jduge()){
                 $('#user_form').ajaxSubmit({
                         success: function (data) {
-{#                            console.log(data);#}
-{#                            if(data.code == "200"){#}
-{#                                alert("成功！");#}
                                 window.location.href="/user/index/";
-{#                            }else{#}
-{#                                alert(data.detail)#}
-{#                            }#}
                         },
                         error: function (data) {
                             {#console.log("inside else");#}

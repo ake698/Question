@@ -18,5 +18,6 @@ urlpatterns = [
     path('delete_answer/', v.delete_answer),
     path('like_answer/', v.like_answer),
     path('select_answer/', v.select_answer),
+    path('person_info/', v.person_info),
     path('',v.index)
 ]

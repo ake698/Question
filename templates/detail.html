@@ -55,7 +55,7 @@ form {
 						</div>
 					</div>
 					<div class="detail-about">
-						<a class="jie-user" href=""> <img
+						<a class="jie-user peronInfo" href="#" data-id="{{ question.users.id }}"> <img
 							src="/media/{{question.users.img}}" alt="头像"> <cite> {{question.users.nickname}}
 								<em>{{ question.createTime }}发布</em> </cite> </a>
 						<div class="detail-hits">
@@ -81,7 +81,7 @@ form {
                         {% for i in question.answer_set.all %}
 						<li data-id="12" class="jieda-daan">
 							<div class="detail-about detail-about-reply">
-								<a class="jie-user" href=""> <img
+								<a class="jie-user peronInfo" href="#" data-id="{{ i.users.id }}"> <img
 									src="/media/{{ i.users.img }}" alt=""> <cite> <i>{{i.users.nickname}}</i>
 										 </cite> </a>
 								<div class="detail-hits">
@@ -161,7 +161,25 @@ form {
  <script type="text/javascript" charset="utf-8" src="/static/res/js/kindeditor.js"></script>
 
   <script type="text/javascript">
-
+  layui.use('layer',function(){
+     var layer = layui.layer;
+  });
+  $(".peronInfo").click(function () {
+     id = $(this).attr("data-id");
+      $.ajax({
+          url:"/person_info/",
+          type:"post",
+          data:{id:id},
+          success: function (data) {
+              console.log(data);
+              data = data.detail;
+              layer.open({
+                  title: data.nickname + "的个人信息"
+                  ,content: "姓名:"+data.nickname+"<br>"+data.college + "-" + data.major + "<br>" + "积分："+data.bonus
+                });
+          }
+      })
+  });
   function set_top(flag){
       console.log(flag);
       $.ajax({

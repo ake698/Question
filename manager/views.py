@@ -22,6 +22,9 @@ def modify(request):
     if request.method == "POST":
         nick_name = request.POST.get("nick_name")
         password = request.POST.get("password")
+        gender = request.POST.get("gender")
+        college = request.POST.get("college")
+        major = request.POST.get("major")
         img = request.FILES.get('vatar')
         #如果图片为空则代表不更新图片
         fileName = "default.jpg"
@@ -41,8 +44,17 @@ def modify(request):
                 f.write(chunk)
             f.close()
         user.img = "img/%s"%fileName
-        user.nickname = nick_name
-        user.password = password
+        if nick_name and nick_name != "":
+            user.nickname = nick_name
+        if password and password != "":
+            user.password = password
+        if gender and gender != "":
+            user.gender = gender
+        if college and college != "":
+            user.college = college
+        if major and major != "":
+            user.major = major
+
         user.save()
         #更新页面信息
         request.session["nickName"] = nick_name

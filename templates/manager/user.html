@@ -22,8 +22,11 @@
                                 <div class="information" style="float: right;margin-right: 30%">
                                     <p>账户：{{ user.username }}</p>
                                     <p>昵称：{{ user.nickname }}</p>
+                                    <p>性别：{{ user.get_gender }}</p>
+                                    <p>学院：{{ user.college }}</p>
+                                    <p>专业：{{ user.major }}</p>
                                     <p>赏金：{{ user.bonus }}</p>
-                                    <p>创建时间：{{ user.createTime }}</p>
+                                    <p>注册时间：{{ user.createTime }}</p>
                                     <hr>
                                     <button type="button" class="btn btn-outline-primary" onclick="window.location.href='/user/modify/'" style="margin-top: 50%">修改个人信息</button>
                                 </div>
